@@ -1,0 +1,74 @@
+2025-06-04 12:24:33,842 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.3.64:5000
+2025-06-04 12:24:33,842 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-06-04 12:24:36,059 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET / HTTP/1.1" 200 -
+2025-06-04 12:24:36,191 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-06-04 12:24:36,191 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET /static/js/lanscan.js HTTP/1.1" 200 -
+2025-06-04 12:24:36,259 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET /get_scan_history HTTP/1.1" 200 -
+2025-06-04 12:24:36,261 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET /get_security_alerts HTTP/1.1" 200 -
+2025-06-04 12:24:36,262 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "GET /get_blocked_devices HTTP/1.1" 200 -
+2025-06-04 12:24:36,292 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:36] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-04 12:24:37,267 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:24:38,855 - __main__ - INFO - Starting quick scan for 192.168.1.0/24 (ID: e65c1432-1182-41c8-852a-8df93bc10e72)
+2025-06-04 12:24:38,907 - scanner.network_scanner - INFO - Starting quick scan on 192.168.1.0/24 with args: -T4 -F
+2025-06-04 12:24:38,908 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:24:38] "POST /scan HTTP/1.1" 200 -
+2025-06-04 12:25:03,750 - __main__ - ERROR - Failed to cancel scan: 'PortScanner' object has no attribute 'stop'
+2025-06-04 12:25:03,750 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:03] "[35m[1mPOST /cancel_scan/e65c1432-1182-41c8-852a-8df93bc10e72 HTTP/1.1[0m" 500 -
+2025-06-04 12:25:03,929 - scanner.network_scanner - INFO - Scan was cancelled
+2025-06-04 12:25:07,279 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:25:12,888 - __main__ - INFO - Starting quick scan for 192.168.1.0/24 (ID: 3300d9ae-1bac-4c94-87fb-8afb36fe43bd)
+2025-06-04 12:25:12,964 - scanner.network_scanner - INFO - Starting quick scan on 192.168.1.0/24 with args: -T4 -F
+2025-06-04 12:25:12,964 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:12] "POST /scan HTTP/1.1" 200 -
+2025-06-04 12:25:28,914 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:28] "GET /scan_status/e65c1432-1182-41c8-852a-8df93bc10e72 HTTP/1.1" 200 -
+2025-06-04 12:25:37,288 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:25:55,948 - __main__ - INFO - Starting quick scan for 192.168.1.0/24 (ID: f87885f9-7dcc-43c4-9f92-b2ed65d54435)
+2025-06-04 12:25:55,999 - scanner.network_scanner - INFO - Starting quick scan on 192.168.1.0/24 with args: -T4 -F
+2025-06-04 12:25:55,999 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:25:55] "POST /scan HTTP/1.1" 200 -
+2025-06-04 12:26:02,970 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:26:02] "GET /scan_status/3300d9ae-1bac-4c94-87fb-8afb36fe43bd HTTP/1.1" 200 -
+2025-06-04 12:26:07,287 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:26:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:26:37,298 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:26:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:26:46,008 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:26:46] "GET /scan_status/f87885f9-7dcc-43c4-9f92-b2ed65d54435 HTTP/1.1" 200 -
+2025-06-04 12:26:54,607 - __main__ - INFO - Starting quick scan for 192.168.1.0/24 (ID: fd4d1884-8560-4970-bacb-3d11840c260f)
+2025-06-04 12:26:54,666 - scanner.network_scanner - INFO - Starting quick scan on 192.168.1.0/24 with args: -T4 -F
+2025-06-04 12:26:54,667 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:26:54] "POST /scan HTTP/1.1" 200 -
+2025-06-04 12:27:07,308 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:27:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:27:37,317 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:27:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:27:44,673 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:27:44] "GET /scan_status/fd4d1884-8560-4970-bacb-3d11840c260f HTTP/1.1" 200 -
+2025-06-04 12:28:07,320 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:28:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:28:34,672 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:28:34] "GET /scan_status/fd4d1884-8560-4970-bacb-3d11840c260f HTTP/1.1" 200 -
+2025-06-04 12:28:37,320 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:28:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:29:07,324 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:29:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:29:24,672 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:29:24] "GET /scan_status/fd4d1884-8560-4970-bacb-3d11840c260f HTTP/1.1" 200 -
+2025-06-04 12:29:37,320 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:29:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:29:52,178 - __main__ - INFO - Starting standard scan for 192.168.1.0/24 (ID: 0757619c-3b71-45c1-b92e-b770a8098df0)
+2025-06-04 12:29:52,202 - scanner.network_scanner - INFO - Starting standard scan on 192.168.1.0/24 with args: -T4 -sV --version-intensity 5
+2025-06-04 12:29:52,202 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:29:52] "POST /scan HTTP/1.1" 200 -
+2025-06-04 12:30:07,325 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:30:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:30:37,331 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:30:37] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:30:42,210 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:30:42] "GET /scan_status/0757619c-3b71-45c1-b92e-b770a8098df0 HTTP/1.1" 200 -
+2025-06-04 12:31:07,333 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:31:07] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 12:31:32,210 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:31:32] "[31m[1mGET /scan_status/0757619c-3b71-45c1-b92e-b770a8098df0 HTTP/1.1[0m" 429 -
+2025-06-04 12:31:36,334 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:31:36] "[31m[1mGET /get_system_stats HTTP/1.1[0m" 429 -
+2025-06-04 12:31:38,595 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:31:38] "[31m[1mPOST /scan HTTP/1.1[0m" 429 -
+2025-06-04 12:32:06,728 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 12:32:06] "[31m[1mGET /get_system_stats HTTP/1.1[0m" 429 -
+2025-06-04 13:03:20,178 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.3.64:5000
+2025-06-04 13:03:20,179 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-06-04 13:03:22,437 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET / HTTP/1.1" 200 -
+2025-06-04 13:03:22,559 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET /static/css/style.css HTTP/1.1" 200 -
+2025-06-04 13:03:22,560 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET /static/js/lanscan.js HTTP/1.1" 200 -
+2025-06-04 13:03:22,647 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET /get_scan_history HTTP/1.1" 200 -
+2025-06-04 13:03:22,649 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET /get_security_alerts HTTP/1.1" 200 -
+2025-06-04 13:03:22,650 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "GET /get_blocked_devices HTTP/1.1" 200 -
+2025-06-04 13:03:22,683 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-06-04 13:03:23,656 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:23] "GET /get_system_stats HTTP/1.1" 200 -
+2025-06-04 13:03:24,815 - __main__ - INFO - Starting quick scan for 192.168.1.0/24 (ID: c4529018-e2db-483a-a2e2-d38869e8db3c)
+2025-06-04 13:03:24,840 - scanner.network_scanner - INFO - Starting quick scan on 192.168.1.0/24 with args: -T4 -F
+2025-06-04 13:03:24,840 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:24] "POST /scan HTTP/1.1" 200 -
+2025-06-04 13:03:26,653 - __main__ - ERROR - Failed to cancel scan: 'PortScanner' object has no attribute 'stop'
+2025-06-04 13:03:26,654 - werkzeug - INFO - 127.0.0.1 - - [04/Jun/2025 13:03:26] "[35m[1mPOST /cancel_scan/c4529018-e2db-483a-a2e2-d38869e8db3c HTTP/1.1[0m" 500 -
+2025-06-04 13:03:26,843 - scanner.network_scanner - INFO - Scan was cancelled

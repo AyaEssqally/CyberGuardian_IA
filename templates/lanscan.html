@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAN Scan Ultimate Pro | CyberGuardian IA</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="https://cdn.jsdelivr.net/npm/plotly.js@2.14.0/dist/plotly.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="notification-container" id="notification-container"></div>
+    
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h1>LAN Scan Ultimate Pro</h1>
+                </div>
+                <div class="header-actions">
+                    <button id="toggle-dark-mode" class="btn-icon" title="Toggle dark mode">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button id="security-center-btn" class="btn-icon" title="Security Center">
+                        <i class="fas fa-user-shield"></i>
+                    </button>
+                    <button id="wifi-control-btn" class="btn-icon" title="WiFi Control">
+                        <i class="fas fa-wifi"></i>
+                    </button>
+                </div>
+            </div>
+            <p class="subtitle">Advanced local network analysis with built-in protection</p>
+        </header>
+
+        <div class="scan-container">
+            <div class="scan-controls">
+                <div class="control-card">
+                    <h3><i class="fas fa-cog"></i> Scan Configuration</h3>
+                    
+                    <div class="form-group">
+                        <label for="ip-range"><i class="fas fa-network-wired"></i> IP Range (ex: 192.168.1.0/24):</label>
+                        <input type="text" id="ip-range" placeholder="192.168.1.0/24" required>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="scan-type"><i class="fas fa-search"></i> Scan Type:</label>
+                            <select id="scan-type">
+                                <option value="quick">Quick (common ports)</option>
+                                <option value="standard">Standard (service detection)</option>
+                                <option value="aggressive">Aggressive (OS and services)</option>
+                                <option value="full">Full (all ports)</option>
+                                <option value="os">OS Detection</option>
+                                <option value="vuln">Vulnerability Scan</option>
+                                <option value="deep">Deep Scan (pentest)</option>
+                                <option value="wifi">WiFi Devices</option>
+                                <option value="behavioral">Behavioral Analysis</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label><i class="fas fa-sliders-h"></i> Options:</label>
+                        <div class="checkbox-grid">
+                            <div>
+                                <input type="checkbox" id="opt-quick" checked>
+                                <label for="opt-quick">Quick Mode</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="opt-deep">
+                                <label for="opt-deep">Deep Analysis</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="opt-vuln">
+                                <label for="opt-vuln">Vulnerability Scan</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="opt-wifi">
+                                <label for="opt-wifi">WiFi Analysis</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="opt-behavioral">
+                                <label for="opt-behavioral">Behavioral Analysis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="start-scan" class="btn-primary">
+                        <i class="fas fa-play"></i> Start Scan
+                    </button>
+                </div>
+
+                <div class="history-card">
+                    <h3><i class="fas fa-history"></i> Scan History</h3>
+                    <div class="history-list" id="scan-history">
+                        <div class="history-empty">
+                            <i class="fas fa-clock"></i>
+                            <p>No recent scans</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scan-results hidden">
+                <div class="results-header">
+                    <h2><i class="fas fa-poll"></i> Scan Results</h2>
+                    <div class="results-actions">
+                        <div class="dropdown">
+                            <button class="btn-secondary dropdown-toggle">
+                                <i class="fas fa-file-export"></i> Export
+                            </button>
+                            <div class="dropdown-content">
+                                <a href="#" id="export-pdf"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a href="#" id="export-html"><i class="fas fa-file-code"></i> HTML</a>
+                                <a href="#" id="export-json"><i class="fas fa-file-code"></i> JSON</a>
+                                <a href="#" id="export-csv"><i class="fas fa-file-csv"></i> CSV</a>
+                            </div>
+                        </div>
+                        <button id="save-scan" class="btn-secondary">
+                            <i class="fas fa-save"></i> Save
+                        </button>
+                    </div>
+                </div>
+
+                <div class="results-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon bg-blue">
+                            <i class="fas fa-laptop-house"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>Hosts</h3>
+                            <div class="summary-value" id="total-hosts">0</div>
+                            <div class="summary-label">Total</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon bg-green">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>Active</h3>
+                            <div class="summary-value" id="up-hosts">0</div>
+                            <div class="summary-label">Online</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon bg-orange">
+                            <i class="fas fa-door-open"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>Ports</h3>
+                            <div class="summary-value" id="open-ports">0</div>
+                            <div class="summary-label">Open</div>
+                        </div>
+                    </div>
+                    <div class="summary-card">
+                        <div class="summary-icon bg-red">
+                            <i class="fas fa-bug"></i>
+                        </div>
+                        <div class="summary-content">
+                            <h3>Vulnerabilities</h3>
+                            <div class="summary-value" id="vulns-count">0</div>
+                            <div class="summary-label">Detected</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-charts">
+                    <div class="chart-container">
+                        <canvas id="services-chart"></canvas>
+                    </div>
+                    <div class="chart-container">
+                        <div id="network-graph"></div>
+                    </div>
+                </div>
+
+                <div class="results-details">
+                    <div class="tabs">
+                        <button class="tab-btn active" data-tab="hosts-tab">
+                            <i class="fas fa-laptop"></i> Hosts
+                        </button>
+                        <button class="tab-btn" data-tab="ports-tab">
+                            <i class="fas fa-plug"></i> Ports
+                        </button>
+                        <button class="tab-btn" data-tab="services-tab">
+                            <i class="fas fa-server"></i> Services
+                        </button>
+                        <button class="tab-btn" data-tab="vulns-tab">
+                            <i class="fas fa-shield-virus"></i> Vulnerabilities
+                        </button>
+                        <button class="tab-btn" data-tab="threats-tab">
+                            <i class="fas fa-user-secret"></i> Threats
+                        </button>
+                        <button class="tab-btn" data-tab="wifi-tab">
+                            <i class="fas fa-wifi"></i> WiFi
+                        </button>
+                    </div>
+
+                    <div id="hosts-tab" class="tab-content active">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="hosts-search" placeholder="Search hosts...">
+                            </div>
+                            <div class="filter-box">
+                                <select id="hosts-filter">
+                                    <option value="all">All Hosts</option>
+                                    <option value="up">Active Hosts Only</option>
+                                    <option value="os">With OS Detected</option>
+                                    <option value="vuln">With Vulnerabilities</option>
+                                    <option value="threat">Potential Threats</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="hosts-table">
+                                <thead>
+                                    <tr>
+                                        <th>IP Address</th>
+                                        <th>Hostname</th>
+                                        <th>Detected OS</th>
+                                        <th>Open Ports</th>
+                                        <th>Risk</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="ports-tab" class="tab-content">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="ports-search" placeholder="Search ports...">
+                            </div>
+                            <div class="filter-box">
+                                <select id="ports-filter">
+                                    <option value="all">All Ports</option>
+                                    <option value="open">Open Ports Only</option>
+                                    <option value="risky">Risky Ports</option>
+                                    <option value="common">Common Ports</option>
+                                    <option value="banned">Banned Ports</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="ports-table">
+                                <thead>
+                                    <tr>
+                                        <th>Port</th>
+                                        <th>Protocol</th>
+                                        <th>Service</th>
+                                        <th>Version</th>
+                                        <th>Host</th>
+                                        <th>Risk</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="services-tab" class="tab-content">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="services-search" placeholder="Search services...">
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="services-table">
+                                <thead>
+                                    <tr>
+                                        <th>Service</th>
+                                        <th>Count</th>
+                                        <th>Common Ports</th>
+                                        <th>Details</th>
+                                        <th>Risk</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="vulns-tab" class="tab-content">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="vulns-search" placeholder="Search vulnerabilities...">
+                            </div>
+                            <div class="filter-box">
+                                <select id="vulns-filter">
+                                    <option value="all">All</option>
+                                    <option value="critical">Critical</option>
+                                    <option value="high">High</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="low">Low</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="vulns-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Description</th>
+                                        <th>Host</th>
+                                        <th>Port</th>
+                                        <th>Severity</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="threats-tab" class="tab-content">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="threats-search" placeholder="Search threats...">
+                            </div>
+                            <div class="filter-box">
+                                <select id="threats-filter">
+                                    <option value="all">All</option>
+                                    <option value="honeypot">Honeypot Triggered</option>
+                                    <option value="bruteforce">Brute Force Attempt</option>
+                                    <option value="scan">Network Scan Detected</option>
+                                    <option value="rogue">Rogue AP Detected</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="threats-table">
+                                <thead>
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>IP Address</th>
+                                        <th>Port</th>
+                                        <th>Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="wifi-tab" class="tab-content">
+                        <div class="table-header">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="wifi-search" placeholder="Search WiFi clients...">
+                            </div>
+                            <div class="filter-box">
+                                <select id="wifi-filter">
+                                    <option value="all">All Clients</option>
+                                    <option value="new">New Clients</option>
+                                    <option value="suspicious">Suspicious</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table id="wifi-table">
+                                <thead>
+                                    <tr>
+                                        <th>MAC Address</th>
+                                        <th>Signal Strength</th>
+                                        <th>First Seen</th>
+                                        <th>Last Seen</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="host-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2 id="modal-host-ip"></h2>
+            <div class="modal-tabs">
+                <button class="modal-tab-btn active" data-tab="host-general">General</button>
+                <button class="modal-tab-btn" data-tab="host-ports">Ports</button>
+                <button class="modal-tab-btn" data-tab="host-vulns">Vulnerabilities</button>
+                <button class="modal-tab-btn" data-tab="host-threats">Threats</button>
+            </div>
+            
+            <div id="host-general" class="modal-tab-content active">
+                <div class="modal-section">
+                    <h3><i class="fas fa-info-circle"></i> General Information</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <span class="info-label">IP Address:</span>
+                            <span class="info-value" id="host-details-ip">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="info-value" id="host-details-status">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Hostname:</span>
+                            <span class="info-value" id="host-details-hostname">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">OS:</span>
+                            <span class="info-value" id="host-details-os">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Risk Score:</span>
+                            <span class="info-value" id="host-details-risk">N/A</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Open Ports:</span>
+                            <span class="info-value" id="host-details-ports">N/A</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h3><i class="fas fa-fingerprint"></i> OS Fingerprint</h3>
+                    <div id="host-os-info" class="os-info">
+                        <pre id="host-os-details">No OS fingerprint information available</pre>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h3><i class="fas fa-shield-alt"></i> Security Actions</h3>
+                    <div id="host-security-actions" class="security-actions">
+                        <button class="btn-danger" id="block-host-btn">
+                            <i class="fas fa-ban"></i> Block This Host
+                        </button>
+                        <button class="btn-warning" id="monitor-host-btn">
+                            <i class="fas fa-eye"></i> Monitor This Host
+                        </button>
+                        <button class="btn-primary" id="auto-protect-btn">
+                            <i class="fas fa-robot"></i> AI Protection
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="host-ports" class="modal-tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-door-open"></i> Open Ports</h3>
+                    <div class="table-container">
+                        <table id="modal-ports-table">
+                            <thead>
+                                <tr>
+                                    <th>Port</th>
+                                    <th>Protocol</th>
+                                    <th>Service</th>
+                                    <th>Version</th>
+                                    <th>Extra Info</th>
+                                    <th>Risk</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="host-vulns" class="modal-tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-shield-virus"></i> Detected Vulnerabilities</h3>
+                    <div id="modal-vulns-list" class="vulns-list">
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i>
+                            <p>No vulnerabilities detected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="host-threats" class="modal-tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-user-secret"></i> Suspicious Activities</h3>
+                    <div id="modal-threats-list" class="threats-list">
+                        <div class="empty-state">
+                            <i class="fas fa-check-circle"></i>
+                            <p>No suspicious activities detected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="security-center-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-user-shield"></i> Security Center</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="firewall-tab">
+                    <i class="fas fa-fire"></i> Firewall
+                </button>
+                <button class="tab-btn" data-tab="blocked-tab">
+                    <i class="fas fa-ban"></i> Blocked Devices
+                </button>
+                <button class="tab-btn" data-tab="alerts-tab">
+                    <i class="fas fa-bell"></i> Alerts
+                </button>
+                <button class="tab-btn" data-tab="settings-tab">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+            
+            <div id="firewall-tab" class="tab-content active">
+                <div class="modal-section">
+                    <h3><i class="fas fa-fire"></i> Firewall Rules</h3>
+                    <div class="table-container">
+                        <table id="firewall-rules-table">
+                            <thead>
+                                <tr>
+                                    <th>Action</th>
+                                    <th>Source</th>
+                                    <th>Destination</th>
+                                    <th>Port</th>
+                                    <th>Protocol</th>
+                                    <th>Comment</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn-primary" id="add-firewall-rule-btn">
+                            <i class="fas fa-plus"></i> Add Rule
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="blocked-tab" class="tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-ban"></i> Blocked Devices</h3>
+                    <div class="table-container">
+                        <table id="blocked-devices-table">
+                            <thead>
+                                <tr>
+                                    <th>MAC Address</th>
+                                    <th>IP Address</th>
+                                    <th>Reason</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="alerts-tab" class="tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-bell"></i> Security Alerts</h3>
+                    <div class="table-container">
+                        <table id="security-alerts-table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>IP Address</th>
+                                    <th>Date</th>
+                                    <th>AI Analysis</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="settings-tab" class="tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-cog"></i> Security Settings</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-honeypot" checked>
+                            Enable Honeypots
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-rate-limit" checked>
+                            Enable Rate Limiting
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-auto-block" checked>
+                            Auto-block Suspicious IPs
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-threat-detection" checked>
+                            Advanced Threat Detection
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-wifi-protection" checked>
+                            WiFi Protection
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-ai-analysis" checked>
+                            AI Behavioral Analysis
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn-primary" id="save-security-settings">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="wifi-control-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-wifi"></i> WiFi Control Center</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="wifi-clients-tab">
+                    <i class="fas fa-users"></i> Connected Clients
+                </button>
+                <button class="tab-btn" data-tab="wifi-settings-tab">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+            
+            <div id="wifi-clients-tab" class="tab-content active">
+                <div class="modal-section">
+                    <h3><i class="fas fa-users"></i> WiFi Clients</h3>
+                    <div class="table-container">
+                        <table id="wifi-clients-table">
+                            <thead>
+                                <tr>
+                                    <th>MAC Address</th>
+                                    <th>IP Address</th>
+                                    <th>Signal Strength</th>
+                                    <th>First Seen</th>
+                                    <th>Last Seen</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="wifi-settings-tab" class="tab-content">
+                <div class="modal-section">
+                    <h3><i class="fas fa-cog"></i> WiFi Settings</h3>
+                    <div class="form-group">
+                        <label>Interface</label>
+                        <input type="text" id="wifi-interface" value="wlan0" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>Monitor Mode</label>
+                        <select id="wifi-monitor-mode">
+                            <option value="enabled">Enabled</option>
+                            <option value="disabled">Disabled</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Scan Interval (seconds)</label>
+                        <input type="number" id="wifi-scan-interval" value="300" min="30">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="enable-rogue-ap-detection" checked>
+                            Detect Rogue Access Points
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn-primary" id="save-wifi-settings">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="threat-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2><i class="fas fa-user-secret"></i> Threat Details</h2>
+            
+            <div class="modal-section">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-label">IP Address:</span>
+                        <span class="info-value" id="threat-details-ip">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Type:</span>
+                        <span class="info-value" id="threat-details-type">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Severity:</span>
+                        <span class="info-value" id="threat-details-severity">N/A</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Time:</span>
+                        <span class="info-value" id="threat-details-time">N/A</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <h3><i class="fas fa-info-circle"></i> Description</h3>
+                <div class="threat-description" id="threat-details-description">
+                    No description available
+                </div>
+            </div>
+            
+            <div class="modal-section">
+                <h3><i class="fas fa-shield-alt"></i> Recommended Actions</h3>
+                <div class="threat-actions">
+                    <button class="btn-danger" id="block-threat-btn">
+                        <i class="fas fa-ban"></i> Block This Threat
+                    </button>
+                    <button class="btn-warning" id="monitor-threat-btn">
+                        <i class="fas fa-eye"></i> Monitor Activity
+                    </button>
+                    <button class="btn-primary" id="analyze-threat-btn">
+                        <i class="fas fa-robot"></i> AI Analysis
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loading-overlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p id="loading-text">Starting scan...</p>
+            <div class="progress-container">
+                <div id="scan-progress" class="progress-bar"></div>
+                <div id="progress-text">0%</div>
+            </div>
+            <div class="scan-stats">
+                <div class="scan-stat">
+                    <span>Hosts scanned:</span>
+                    <span id="stats-hosts">0</span>
+                </div>
+                <div class="scan-stat">
+                    <span>Ports found:</span>
+                    <span id="stats-ports">0</span>
+                </div>
+                <div class="scan-stat">
+                    <span>Time elapsed:</span>
+                    <span id="stats-time">0s</span>
+                </div>
+            </div>
+            <button id="cancel-scan" class="btn-danger">
+                <i class="fas fa-stop-circle"></i> Cancel Scan
+            </button>
+        </div>
+    </div>
+
+    <script src="/static/js/lanscan.js"></script>
+</body>
+</html>
